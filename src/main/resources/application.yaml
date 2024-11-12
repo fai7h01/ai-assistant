@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: ai-assistant
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o
+        enabled: true
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+  datasource:
+    url: jdbc:postgresql://pgvector:5432/springai
+    username: postgres
+    password: faith
+
+logging:
+  level:
+    org:
+      apache:
+        pdfbox:
+          pdmodel:
+            font:
+              FileSystemFontProvider: ERROR
+      springframework:
+        security: DEBUG
+
+server:
+  port: 1010
