@@ -9,6 +9,8 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 public class AiAssistantApplicationTest {
 
@@ -31,5 +33,85 @@ public class AiAssistantApplicationTest {
 
         logger.info("\n\n>> Response: {} \n\n", response);
 
+    }
+
+    @Test
+    void tellMeJokeSystemPrompt() {
+
+        ChatClient chatClient = ChatClient.builder(chatModel)
+                .defaultSystem("You are a friendly assistant that answers question in the voice of {voice}.")
+                .build();
+
+        for (String voice : List.of("Pirate", "Yoda", "Shakespeare", "Robot")) {
+
+            var response = chatClient.prompt()
+                    .user("Tell me a joke")
+                    .system(sp -> sp.param("voice", voice))
+                    .call()
+                    .content();
+
+            logger.info("\n\n>>  {} joke: {} \n\n", voice, response);
+        }
+    }
+
+
+    /////////////////////
+    // Structured output
+    /////////////////////
+    record ActorFilms(
+            String actor,
+            List<String> films) {
+    }
+
+    @Test
+    void structuredOutput() {
+
+        ChatClient chatClient = ChatClient.create(chatModel);
+
+        ActorFilms response = chatClient.prompt()
+                .user("Get the filmography for Tom Hanks")
+                .call()
+                .entity(ActorFilms.class);
+
+        logger.info("\n\n>>  Response: {} \n\n", response);
+    }
+
+    /////////////////////
+    // Prompt stuffing
+    /////////////////////
+    @Test
+    void noContext() {
+        var response = ChatClient.builder(chatModel).build()
+                .prompt()
+                .user("What is Carina?")
+                .call()
+                .content();
+
+        logger.info("\n\n>> Response: {} \n\n", response);
+    }
+
+    @Test
+    void stuffPrompt() {
+        String context = """
+				What is Carina?
+				Founded in 2016, Carina is a technology nonprofit that provides a safe, easy-to-use, online
+				location-based care matching service. We serve individuals and families searching for home
+				care or child care and care professionals who are looking for good jobs. Carina is committed to
+				building community and prioritizing people over profit. Through our partnerships with unions
+				and social service agencies, we build online tools to bring good jobs to care workers, so they
+				can focus on their passion — caring for others.
+				Our vision is a care economy that strengthens our communities by respecting and supporting
+				workers, individuals and families. We offer a care matching platform where verified care
+				providers can connect with individuals and families who need care.
+				""";
+
+        var response = ChatClient.builder(chatModel).build()
+                .prompt()
+                .user("What is Carina? Please consider the following context when answering the question: "
+                        + context)
+                .call()
+                .content();
+
+        logger.info("\n\n>> Response: {} \n\n", response);
     }
 }
