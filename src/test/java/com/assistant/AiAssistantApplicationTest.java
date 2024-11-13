@@ -1,10 +1,13 @@
 package com.assistant;
 
+import com.assistant.service.DataLoadingService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,10 +20,13 @@ public class AiAssistantApplicationTest {
     private static final Logger logger = LoggerFactory.getLogger(AiAssistantApplicationTest.class);
 
     @Autowired
-    ChatModel chatModel;
+    private ChatModel chatModel;
 
     @Autowired
-    VectorStore vectorStore;
+    private DataLoadingService dataLoadingService;
+
+    @Autowired
+    private VectorStore vectorStore;
 
     @Test
     void tellMeJoke() {
@@ -113,5 +119,30 @@ public class AiAssistantApplicationTest {
                 .content();
 
         logger.info("\n\n>> Response: {} \n\n", response);
+    }
+
+    /////////////////////
+    // RAG
+    /////////////////////
+    @Test
+    void preLoadData() {
+        dataLoadingService.load();
+    }
+
+    @Test
+    void purposeQuestion() {
+
+        String userText = "What is features of InvoiceHub?";
+
+        var response = ChatClient.builder(chatModel)
+                .build().prompt()
+                .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
+                .user(userText)
+                .call()
+                .chatResponse();
+
+        logger.info("\n\n>> Response: {} \n\n", response.getResult().getOutput().getContent());
+
+        // evaluate(userText, response);
     }
 }
