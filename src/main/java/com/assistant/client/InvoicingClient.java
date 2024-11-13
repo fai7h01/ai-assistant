@@ -1,6 +1,6 @@
 package com.assistant.client;
 
-import com.assistant.dto.response.ResponseWrapper;
+import com.assistant.dto.response.InvoiceResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface InvoicingClient {
 
     @GetMapping("/invoice/list")
-    ResponseEntity<ResponseWrapper> getInvoices();
+    ResponseEntity<InvoiceResponse> getInvoices();
 }

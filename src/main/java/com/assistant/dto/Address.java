@@ -7,20 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CompanyDTO {
+public class Address {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String state;
+    private String country;
+    private String zipCode;
 
-    private String title;
-    private String phone;
-    private String website;
-    private String email;
-    private AddressDTO address;
-    //private Integer estimatedRevenue;
 }

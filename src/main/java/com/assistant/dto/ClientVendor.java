@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ClientVendorDTO {
+public class ClientVendor {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -27,10 +27,10 @@ public class ClientVendorDTO {
 
     private ClientVendorType clientVendorType;
 
-    private AddressDTO address;
+    private Address address;
 
     @JsonIgnore
-    private CompanyDTO company;
+    private Company company;
 
     @JsonIgnore
     private boolean hasInvoice;

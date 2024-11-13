@@ -1,8 +1,8 @@
 package com.assistant.service;
 
 import com.assistant.client.InvoicingClient;
-import com.assistant.dto.InvoiceDTO;
-import com.assistant.dto.response.ResponseWrapper;
+import com.assistant.dto.Invoice;
+import com.assistant.dto.response.InvoiceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,9 @@ public class InvoicingService {
         this.invoicingClient = invoicingClient;
     }
 
-    public List<InvoiceDTO> getInvoices() {
+    public List<Invoice> getInvoices() {
 
-        ResponseEntity<ResponseWrapper> response = invoicingClient.getInvoices();
+        ResponseEntity<InvoiceResponse> response = invoicingClient.getInvoices();
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
@@ -32,9 +32,9 @@ public class InvoicingService {
         throw new IllegalStateException();
     }
 
-    private InvoiceDTO findInvoice(String invoiceNo) {
+    private Invoice findInvoice(String invoiceNo) {
         return getInvoices().stream()
-                .filter(invoiceDTO -> invoiceDTO.getInvoiceNo().equals(invoiceNo))
+                .filter(invoice -> invoice.getInvoiceNo().equals(invoiceNo))
                 .findFirst().orElseThrow(() -> new NoSuchElementException("Invoice Not Found."));
     }
 
@@ -43,7 +43,7 @@ public class InvoicingService {
         return toInvoiceDetails(invoice);
     }
 
-    private InvoicingTools.InvoiceDetails toInvoiceDetails(InvoiceDTO invoice) {
+    private InvoicingTools.InvoiceDetails toInvoiceDetails(Invoice invoice) {
         return new InvoicingTools.InvoiceDetails(
                 invoice.getInvoiceNo(),
                 invoice.getInvoiceStatus(),

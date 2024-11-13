@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InvoiceDTO {
+public class Invoice {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -39,9 +39,9 @@ public class InvoiceDTO {
     private String signature;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private CompanyDTO company;
+    private Company company;
 
-    private ClientVendorDTO clientVendor;
+    private ClientVendor clientVendor;
 
     private BigDecimal price;
 
