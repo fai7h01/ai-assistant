@@ -5,14 +5,26 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.VectorStoreChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.evaluation.EvaluationRequest;
+import org.springframework.ai.evaluation.EvaluationResponse;
+import org.springframework.ai.evaluation.RelevancyEvaluator;
+import org.springframework.ai.model.Content;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.MimeTypeUtils;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class AiAssistantApplicationTest {
@@ -143,6 +155,48 @@ public class AiAssistantApplicationTest {
 
         logger.info("\n\n>> Response: {} \n\n", response.getResult().getOutput().getContent());
 
-        // evaluate(userText, response);
+    }
+
+
+    /////////////////////
+    // Chat Memory
+    /////////////////////
+    @Test
+    void conversationMemory() {
+
+        var chatClient = ChatClient.builder(chatModel)
+                //.defaultAdvisors(new PromptChatMemoryAdvisor(new InMemoryChatMemory()))
+                // .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+                 //.defaultAdvisors(new VectorStoreChatMemoryAdvisor(vectorStore))
+                .build();
+
+        var response = chatClient.prompt()
+                .user("My name is John")
+                .call()
+                .content();
+
+        logger.info("\n\n>> Response 1: {} \n\n", response);
+
+        response = chatClient.prompt()
+                .user("Please tell me, what is my name?")
+                .call()
+                .content();
+
+        logger.info("\n\n>> Response 2: {} \n\n", response);
+    }
+
+    /////////////////////
+    // Multi-modality
+    /////////////////////
+    @Test
+    void multiModality() {
+
+        String response = ChatClient.create(chatModel).prompt()
+                .user(u -> u.text("Explain what do you see on this picture?")
+                        .media(MimeTypeUtils.IMAGE_JPEG, new ClassPathResource("/data/test.jpeg")))
+                .call()
+                .content();
+
+        logger.info("\n\n>> Response: {} \n\n", response);
     }
 }
