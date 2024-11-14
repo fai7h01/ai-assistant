@@ -2,6 +2,7 @@ package com.assistant.service;
 
 import com.assistant.enums.InvoiceStatus;
 import com.assistant.enums.InvoiceType;
+import com.assistant.service.impl.InvoicingServiceImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,9 @@ public class InvoicingTools {
     private static final Logger logger = LoggerFactory.getLogger(InvoicingTools.class);
 
     @Autowired
-    private InvoicingService invoicingService;
+    private InvoiceService invoiceService;
 
-    public record InvoiceDetailsRequest(String invoiceNo){
+    public record InvoiceDetailsRequest(String invoiceNo, String companyTitle){
     }
 
 
@@ -36,6 +37,7 @@ public class InvoicingTools {
                                  LocalDateTime acceptDate,
                                  String paymentTerms,
                                  String notes,
+                                 String companyTitle,
                                  BigDecimal price,
                                  BigDecimal tax,
                                  BigDecimal total) {
@@ -47,12 +49,27 @@ public class InvoicingTools {
     public Function<InvoiceDetailsRequest, InvoiceDetails> getInvoiceDetails() {
         return request -> {
             try {
-                return invoicingService.getInvoiceDetails(request.invoiceNo);
+                return invoiceService.getInvoiceDetails(request.invoiceNo, request.companyTitle);
             }
             catch (Exception e) {
                 logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
                 return new InvoiceDetails(request.invoiceNo, null, null, null, null,
-                        null, null, null, null, null, null);
+                        null, null, null, null, null, null, null);
+            }
+        };
+    }
+
+    @Bean
+    @Description("Approve invoice and get details")
+    public Function<InvoiceDetailsRequest, InvoiceDetails> approveInvoice() {
+        return request -> {
+            try {
+                return invoiceService.approveInvoice(request.invoiceNo, request.companyTitle);
+            }
+            catch (Exception e) {
+                logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new InvoiceDetails(request.invoiceNo, null, null, null, null,
+                        null, null, null, null, null, null, null);
             }
         };
     }

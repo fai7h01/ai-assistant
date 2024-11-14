@@ -39,7 +39,7 @@ public class Invoice {
     private String signature;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Company company;
+    private String company;
 
     private ClientVendor clientVendor;
 

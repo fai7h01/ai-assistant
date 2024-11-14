@@ -28,5 +28,23 @@ logging:
         security: DEBUG
 
 
+keycloak:
+  realm: e-invoices
+  auth-server-url: http://localhost:8080/auth
+  ssl-required: none
+  resource: ai-assistant
+  credentials:
+    secret: 4rMyEnxO7bIx9SR7qv3Hhr5msQ9IKQVS
+  use-resource-role-mappings: true
+  autodetect-bearer-only: true
+
+master:
+  user:
+    username: admin
+    password: admin
+  realm: master
+  client: master-client
+
+
 server:
   port: 1010

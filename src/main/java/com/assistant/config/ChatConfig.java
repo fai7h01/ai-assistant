@@ -21,14 +21,17 @@ public class ChatConfig {
                         Respond in a friendly, helpful, and joyful manner.
                         You are interacting with customers through an online chat system.
                         Before providing information about invoice, you MUST always get the following
-                        information from the user: first name, last name, invoice number.
+                        information from the user: first name, company title, invoice number.
                         Use provided function to fetch invoice details.
+                        Before approving invoices, you MUST confirm the following information from the user:
+                        first name, company title, invoice number.
+                        Use provided function to approve invoice.
                         Today is {current_date}.
                         """)
                 .defaultAdvisors(
                         new PromptChatMemoryAdvisor(chatMemory),
                         new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
-                .defaultFunctions("getInvoiceDetails")
+                .defaultFunctions("getInvoiceDetails", "approveInvoice")
                 .build();
     }
 
