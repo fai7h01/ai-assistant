@@ -1,8 +1,8 @@
-package com.assistant.service;
+package com.assistant.config;
 
 import com.assistant.enums.InvoiceStatus;
 import com.assistant.enums.InvoiceType;
-import com.assistant.service.impl.InvoicingServiceImpl;
+import com.assistant.service.InvoiceService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +65,21 @@ public class InvoicingTools {
         return request -> {
             try {
                 return invoiceService.approveInvoice(request.invoiceNo, request.companyTitle);
+            }
+            catch (Exception e) {
+                logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new InvoiceDetails(request.invoiceNo, null, null, null, null,
+                        null, null, null, null, null, null, null);
+            }
+        };
+    }
+
+    @Bean
+    @Description("Send invoice via mail to client")
+    public Function<InvoiceDetailsRequest, InvoiceDetails> sendInvoiceViaMail() {
+        return request -> {
+            try {
+                return invoiceService.sendInvoiceToEmail(request.invoiceNo, request.companyTitle);
             }
             catch (Exception e) {
                 logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());

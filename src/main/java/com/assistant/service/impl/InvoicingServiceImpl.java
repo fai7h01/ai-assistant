@@ -4,7 +4,7 @@ import com.assistant.client.InvoicingClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceResponse;
 import com.assistant.service.InvoiceService;
-import com.assistant.service.InvoicingTools;
+import com.assistant.config.InvoicingTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,6 +56,19 @@ public class InvoicingServiceImpl implements InvoiceService {
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();
             log.info("\n\n>> Approved Invoice: {}", invoice);
+            return toInvoiceDetails(invoice);
+        }
+        throw new IllegalStateException("Response failed.");
+    }
+
+    @Override
+    public InvoicingTools.InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
+
+        ResponseEntity<InvoiceResponse<Invoice>> response = invoicingClient.sendInvoiceToEmail(invNo, companyTitle);
+
+        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
+            Invoice invoice = response.getBody().getData();
+            log.info("\n\n>> Invoice is successfully sent to client!");
             return toInvoiceDetails(invoice);
         }
         throw new IllegalStateException("Response failed.");

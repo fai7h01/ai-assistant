@@ -20,4 +20,8 @@ public interface InvoicingClient {
     ResponseEntity<InvoiceResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo,
                                                             @PathVariable("companyTitle") String company);
 
+    @GetMapping("/assistant/invoice/send/{invNo}/{companyTitle}")
+    ResponseEntity<InvoiceResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo,
+                                                            @PathVariable("companyTitle") String company);
+
 }
