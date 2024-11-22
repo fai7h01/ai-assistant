@@ -1,6 +1,7 @@
 package com.assistant.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -32,6 +33,7 @@ public class ChatConfig {
                         Today is {current_date}.
                         """)
                 .defaultAdvisors(
+                        new MessageChatMemoryAdvisor(chatMemory),
                         new PromptChatMemoryAdvisor(chatMemory),
                         new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
                 .defaultFunctions("getInvoiceDetails", "approveInvoice", "sendInvoiceViaMail")
