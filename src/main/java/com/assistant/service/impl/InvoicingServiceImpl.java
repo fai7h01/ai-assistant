@@ -26,7 +26,6 @@ public class InvoicingServiceImpl implements InvoiceService {
 
     public List<Invoice> getInvoices(String companyTitle) {
 
-
         ResponseEntity<InvoiceResponse<List<Invoice>>> response = invoicingClient.getInvoices(companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
