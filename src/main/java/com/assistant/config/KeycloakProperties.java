@@ -14,7 +14,7 @@ public class KeycloakProperties {
     private String clientId;
     @Value("${keycloak.credentials.secret}")
     private String clientSecret;
-    @Value("${master.user}")
+    @Value("${master.user.username}")
     private String masterUser;
     @Value("${master.user.password}")
     private String masterUserPswd;
