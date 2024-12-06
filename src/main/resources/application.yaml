@@ -12,7 +12,7 @@ spring:
       pgvector:
         initialize-schema: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/springai
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: faith
 
@@ -37,6 +37,7 @@ keycloak:
     secret: 4rMyEnxO7bIx9SR7qv3Hhr5msQ9IKQVS
   use-resource-role-mappings: true
   autodetect-bearer-only: true
+
 
 master:
   user:
