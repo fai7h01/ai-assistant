@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: ai-assistant
+  ai:
+    openai:
+      api-key: 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
+      chat:
+        options:
+          model: gpt-4o
+        enabled: true
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+  datasource:
+    url: jdbc:postgresql://assistant-db.chc6cawgccpt.us-east-1.rds.amazonaws.com/assistant_db
+    username: agent_db_user
+    password: AssistantDb123.
+
+logging:
+  level:
+    org:
+      apache:
+        pdfbox:
+          pdmodel:
+            font:
+              FileSystemFontProvider: ERROR
+      springframework:
+        security: DEBUG
+
+
+keycloak:
+  realm: e-invoices
+  auth-server-url: https://api.invoicehub.space/auth
+  ssl-required: external
+  resource: ai-assistant
+  credentials:
+    secret: WfOKWiH0ltDomMBrihTyEyuczKwmwmum
+  use-resource-role-mappings: true
+  autodetect-bearer-only: true
+
+keycloak-token:
+  url: https://api.invoicehub.space/auth/realms/e-invoices/protocol/openid-connect/token
+
+
+master:
+  user:
+    username: admin
+    password: admin
+  realm: master
+  client: admin-cli
+
+
+server:
+  port: 1010

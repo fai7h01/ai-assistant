@@ -1,5 +1,6 @@
 package com.assistant.service;
 
+
 import com.assistant.config.InvoicingTools;
 import com.assistant.dto.Invoice;
 
@@ -14,4 +15,8 @@ public interface InvoiceService {
     InvoicingTools.InvoiceDetails approveInvoice(String invNo, String companyTitle);
 
     InvoicingTools.InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle);
+
+    InvoicingTools.InvoiceDetails createInvoice(String companyTitle);
+
+
 }

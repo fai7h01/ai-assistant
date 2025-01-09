@@ -73,6 +73,11 @@ public class InvoicingServiceImpl implements InvoiceService {
         throw new IllegalStateException("Response failed.");
     }
 
+    @Override
+    public InvoicingTools.InvoiceDetails createInvoice(String companyTitle) {
+        return null;
+    }
+
     private InvoicingTools.InvoiceDetails toInvoiceDetails(Invoice invoice) {
         return new InvoicingTools.InvoiceDetails(
                 invoice.getInvoiceNo(),

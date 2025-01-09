@@ -2,13 +2,16 @@ package com.assistant.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Getter
 @Component
+@Profile("prod")
 public class KeycloakProperties {
 
-    private final String tokenUrl = "http://localhost:8080/auth/realms/e-invoices/protocol/openid-connect/token";
+    @Value("${keycloak-token.url}")
+    private String tokenUrl;
 
     @Value("${keycloak.resource}")
     private String clientId;

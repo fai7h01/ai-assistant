@@ -11,9 +11,9 @@ import java.time.LocalDate;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://www.invoicehub.space")
 @RestController
-@RequestMapping("/assistant")
+@RequestMapping("/api/v1.0/assistant")
 public class ChatController {
 
     private final ChatClient chatClient;

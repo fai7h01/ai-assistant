@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: ai-assistant
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o
+        enabled: true
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ai-assistant
+    username: postgres
+    password: faith
+
+logging:
+  level:
+    org:
+      apache:
+        pdfbox:
+          pdmodel:
+            font:
+              FileSystemFontProvider: ERROR
+      springframework:
+        security: DEBUG
+
+
+keycloak:
+  realm: e-invoices
+  auth-server-url: http://localhost:8080/auth
+  ssl-required: none
+  resource: ai-assistant
+  credentials:
+    secret: wjWR3tq841cvO0X8WDkXJZZzC8FOySqM
+  use-resource-role-mappings: true
+  autodetect-bearer-only: true
+
+
+master:
+  user:
+    username: admin
+    password: admin
+  realm: master
+  client: admin-cli
+
+keycloak-token:
+  url: http://localhost:8080/auth/realms/e-invoices/protocol/openid-connect/token
+
+server:
+  port: 1010
