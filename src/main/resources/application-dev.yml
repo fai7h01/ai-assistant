@@ -15,6 +15,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/ai-assistant
     username: postgres
     password: faith
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/e-invoices
 
 logging:
   level:
@@ -31,12 +36,13 @@ logging:
 keycloak:
   realm: e-invoices
   auth-server-url: http://localhost:8080/auth
-  ssl-required: none
+  ssl-required: external
   resource: ai-assistant
   credentials:
     secret: wjWR3tq841cvO0X8WDkXJZZzC8FOySqM
   use-resource-role-mappings: true
   autodetect-bearer-only: true
+
 
 
 master:

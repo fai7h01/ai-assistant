@@ -1,7 +1,6 @@
 package com.assistant.dto;
 
 import com.assistant.enums.InvoiceStatus;
-import com.assistant.enums.InvoiceType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,6 @@ public class Invoice {
     private String invoiceNo;
 
     private InvoiceStatus invoiceStatus = InvoiceStatus.AWAITING_APPROVAL;
-
-    private InvoiceType invoiceType;
 
     private LocalDateTime dateOfIssue;
 

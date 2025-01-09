@@ -4,7 +4,7 @@ import com.assistant.client.InvoicingClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceResponse;
 import com.assistant.service.InvoiceService;
-import com.assistant.config.InvoicingTools;
+import com.assistant.util.InvoicingTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -82,7 +82,6 @@ public class InvoicingServiceImpl implements InvoiceService {
         return new InvoicingTools.InvoiceDetails(
                 invoice.getInvoiceNo(),
                 invoice.getInvoiceStatus(),
-                invoice.getInvoiceType(),
                 invoice.getDateOfIssue(),
                 invoice.getDueDate(),
                 invoice.getAcceptDate(),

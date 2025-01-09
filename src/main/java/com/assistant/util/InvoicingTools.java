@@ -1,7 +1,6 @@
-package com.assistant.config;
+package com.assistant.util;
 
 import com.assistant.enums.InvoiceStatus;
-import com.assistant.enums.InvoiceType;
 import com.assistant.service.InvoiceService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.slf4j.Logger;
@@ -32,7 +31,6 @@ public class InvoicingTools {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public record InvoiceDetails(String invoiceNo,
                                  InvoiceStatus invoiceStatus,
-                                 InvoiceType invoiceType,
                                  LocalDateTime dateOfIssue,
                                  LocalDateTime dueDate,
                                  LocalDateTime acceptDate,
@@ -52,7 +50,7 @@ public class InvoicingTools {
             } catch (Exception e) {
                 logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
                 return new InvoiceDetails(request.invoiceNo, null, null, null, null,
-                        null, null, null, null, null, null, null);
+                        null, null, null, null, null, null);
             }
         };
     }

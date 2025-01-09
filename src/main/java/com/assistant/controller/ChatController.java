@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
-@CrossOrigin(origins = "https://www.invoicehub.space")
 @RestController
 @RequestMapping("/api/v1.0/assistant")
 public class ChatController {
@@ -21,6 +20,7 @@ public class ChatController {
     public ChatController(ChatClient chatClient) {
         this.chatClient = chatClient;
     }
+
 
     @GetMapping
     public ResponseEntity<ResponseWrapper> chat(@RequestParam(value = "q") String userMessage) {

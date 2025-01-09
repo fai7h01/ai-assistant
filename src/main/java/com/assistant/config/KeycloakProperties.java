@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Component
-@Profile("prod")
+@Profile("dev")
 public class KeycloakProperties {
 
     @Value("${keycloak-token.url}")
