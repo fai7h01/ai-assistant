@@ -37,7 +37,7 @@ public class ChatConfig {
                 .defaultAdvisors(
                         new MessageChatMemoryAdvisor(chatMemory),
                         new PromptChatMemoryAdvisor(chatMemory),
-                        new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
+                        new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder().topK(3).similarityThreshold(0.75).build()))
                 .defaultFunctions("getInvoiceDetails", "approveInvoice", "sendInvoiceViaMail")
                 .build();
     }

@@ -1,10 +1,10 @@
 package com.assistant.service.impl;
 
+import com.assistant.dto.records.*;
 import com.assistant.client.InvoicingClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceResponse;
 import com.assistant.service.InvoiceService;
-import com.assistant.util.InvoicingTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,13 +42,13 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
-    public InvoicingTools.InvoiceDetails getInvoiceDetails(String invoiceNo, String companyTitle) {
+    public InvoiceDetails getInvoiceDetails(String invoiceNo, String companyTitle) {
         var invoice = findInvoice(invoiceNo, companyTitle);
         return toInvoiceDetails(invoice);
     }
 
     @Override
-    public InvoicingTools.InvoiceDetails approveInvoice(String invNo, String companyTitle) {
+    public InvoiceDetails approveInvoice(String invNo, String companyTitle) {
 
         ResponseEntity<InvoiceResponse<Invoice>> response = invoicingClient.approveInvoice(invNo, companyTitle);
 
@@ -61,7 +61,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoicingTools.InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
+    public InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
 
         ResponseEntity<InvoiceResponse<Invoice>> response = invoicingClient.sendInvoiceToEmail(invNo, companyTitle);
 
@@ -74,12 +74,12 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoicingTools.InvoiceDetails createInvoice(String companyTitle) {
+    public InvoiceDetails createInvoice(String companyTitle) {
         return null;
     }
 
-    private InvoicingTools.InvoiceDetails toInvoiceDetails(Invoice invoice) {
-        return new InvoicingTools.InvoiceDetails(
+    private InvoiceDetails toInvoiceDetails(Invoice invoice) {
+        return new InvoiceDetails(
                 invoice.getInvoiceNo(),
                 invoice.getInvoiceStatus(),
                 invoice.getDateOfIssue(),
