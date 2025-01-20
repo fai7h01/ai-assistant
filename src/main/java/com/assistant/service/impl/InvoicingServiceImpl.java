@@ -3,7 +3,7 @@ package com.assistant.service.impl;
 import com.assistant.dto.records.*;
 import com.assistant.client.InvoiceHubClient;
 import com.assistant.dto.Invoice;
-import com.assistant.dto.response.InvoiceResponse;
+import com.assistant.dto.response.InvoiceHubResponse;
 import com.assistant.service.InvoiceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class InvoicingServiceImpl implements InvoiceService {
 
     public List<Invoice> getInvoices(String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<List<Invoice>>> response = invoiceHubClient.getInvoices(companyTitle);
+        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices(companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
@@ -50,7 +50,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     @Override
     public InvoiceDetails approveInvoice(String invNo, String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<Invoice>> response = invoiceHubClient.approveInvoice(invNo, companyTitle);
+        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.approveInvoice(invNo, companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();
@@ -63,7 +63,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     @Override
     public InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<Invoice>> response = invoiceHubClient.sendInvoiceToEmail(invNo, companyTitle);
+        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.sendInvoiceToEmail(invNo, companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();

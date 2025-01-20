@@ -21,7 +21,6 @@ public class ChatController {
         this.chatClient = chatClient;
     }
 
-
     @GetMapping
     public ResponseEntity<ResponseWrapper> chat(@RequestParam(value = "q") String userMessage) {
         String content = chatClient.prompt()

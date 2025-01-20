@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
-    @ExceptionHandler(CompanyCouldNotRetrievedException.class)
+    @ExceptionHandler({CompanyCouldNotRetrievedException.class, UserCouldNotRetrievedException.class})
     public ResponseEntity<ExceptionWrapper> handleNotRetrievedException(Throwable exception) {
         log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

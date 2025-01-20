@@ -1,8 +1,9 @@
 package com.assistant.client;
 
 import com.assistant.dto.Invoice;
+import com.assistant.dto.User;
 import com.assistant.dto.response.CompanyResponse;
-import com.assistant.dto.response.InvoiceResponse;
+import com.assistant.dto.response.InvoiceHubResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +16,21 @@ import java.util.List;
 public interface InvoiceHubClient {
 
     @GetMapping("/assistant/invoice/list/{companyTitle}")
-    ResponseEntity<InvoiceResponse<List<Invoice>>> getInvoices(@PathVariable("companyTitle") String company);
+    ResponseEntity<InvoiceHubResponse<List<Invoice>>> getInvoices(@PathVariable("companyTitle") String company);
 
     @PostMapping("/assistant/invoice/approve/{invNo}/{companyTitle}")
-    ResponseEntity<InvoiceResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo,
-                                                            @PathVariable("companyTitle") String company);
+    ResponseEntity<InvoiceHubResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo,
+                                                               @PathVariable("companyTitle") String company);
 
     @GetMapping("/assistant/invoice/send/{invNo}/{companyTitle}")
-    ResponseEntity<InvoiceResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo,
-                                                            @PathVariable("companyTitle") String company);
+    ResponseEntity<InvoiceHubResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo,
+                                                                   @PathVariable("companyTitle") String company);
 
     @GetMapping("/company")
     ResponseEntity<CompanyResponse> getLoggedInCompany();
+
+    @GetMapping("/user/loggedInUser")
+    ResponseEntity<InvoiceHubResponse<User>> getLoggedInUser();
 
 
 }

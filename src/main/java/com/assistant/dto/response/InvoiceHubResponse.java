@@ -1,10 +1,7 @@
 package com.assistant.dto.response;
 
-import com.assistant.dto.Invoice;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InvoiceResponse<T> {
+public class InvoiceHubResponse<T> {
 
     private boolean success;
     private String message;
