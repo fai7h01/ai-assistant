@@ -32,18 +32,15 @@ logging:
       springframework:
         security: DEBUG
 
-
 keycloak:
   realm: e-invoices
   auth-server-url: http://localhost:8080/auth
   ssl-required: external
-  resource: ai-assistant
+  resource: invoicing-app
   credentials:
-    secret: wjWR3tq841cvO0X8WDkXJZZzC8FOySqM
+    secret: KQXRzUPQlJY57CWd8wJF9Dd9wrzgaZvm
   use-resource-role-mappings: true
   autodetect-bearer-only: true
-
-
 
 master:
   user:

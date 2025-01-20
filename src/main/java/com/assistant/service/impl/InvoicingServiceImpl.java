@@ -1,7 +1,7 @@
 package com.assistant.service.impl;
 
 import com.assistant.dto.records.*;
-import com.assistant.client.InvoicingClient;
+import com.assistant.client.InvoiceHubClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceResponse;
 import com.assistant.service.InvoiceService;
@@ -17,16 +17,16 @@ import java.util.Objects;
 @Service
 public class InvoicingServiceImpl implements InvoiceService {
 
-    private final InvoicingClient invoicingClient;
+    private final InvoiceHubClient invoiceHubClient;
 
-    public InvoicingServiceImpl(InvoicingClient invoicingClient) {
-        this.invoicingClient = invoicingClient;
+    public InvoicingServiceImpl(InvoiceHubClient invoiceHubClient) {
+        this.invoiceHubClient = invoiceHubClient;
     }
 
 
     public List<Invoice> getInvoices(String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<List<Invoice>>> response = invoicingClient.getInvoices(companyTitle);
+        ResponseEntity<InvoiceResponse<List<Invoice>>> response = invoiceHubClient.getInvoices(companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
@@ -50,7 +50,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     @Override
     public InvoiceDetails approveInvoice(String invNo, String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<Invoice>> response = invoicingClient.approveInvoice(invNo, companyTitle);
+        ResponseEntity<InvoiceResponse<Invoice>> response = invoiceHubClient.approveInvoice(invNo, companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();
@@ -63,7 +63,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     @Override
     public InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
 
-        ResponseEntity<InvoiceResponse<Invoice>> response = invoicingClient.sendInvoiceToEmail(invNo, companyTitle);
+        ResponseEntity<InvoiceResponse<Invoice>> response = invoiceHubClient.sendInvoiceToEmail(invNo, companyTitle);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();
