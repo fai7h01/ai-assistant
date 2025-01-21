@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
 
-import java.util.function.BiFunction;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 @Configuration
@@ -36,6 +38,19 @@ public class InvoicingTools {
         };
     }
 
+    private Function<InvoiceDetailsRequest, List<InvoiceDetails>> createSupplier(Supplier<List<InvoiceDetails>> processor) {
+        return request -> {
+            try {
+                return processor.get();
+            } catch (Exception e) {
+                logger.warn("Invoice details list: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new ArrayList<>();
+            }
+        };
+    }
+
+
+
     @Bean
     @Description("Get invoice details")
     public Function<InvoiceDetailsRequest, InvoiceDetails> getInvoiceDetails() {
@@ -52,6 +67,12 @@ public class InvoicingTools {
     @Description("Send invoice via mail to client")
     public Function<InvoiceDetailsRequest, InvoiceDetails> sendInvoiceViaMail() {
         return createFunction(invoiceService::sendInvoiceToEmail);
+    }
+
+    @Bean
+    @Description("Analyze sales data")
+    public Function<InvoiceDetailsRequest, List<InvoiceDetails>> analyzeSales() {
+        return createSupplier(invoiceService::getApprovedInvoices);
     }
 
     //data analysis

@@ -15,7 +15,7 @@ public interface InvoiceService {
 
     InvoiceDetails sendInvoiceToEmail(String invNo);
 
-    InvoiceDetails createInvoice(String companyTitle);
+    List<InvoiceDetails> getApprovedInvoices();
 
 
 }

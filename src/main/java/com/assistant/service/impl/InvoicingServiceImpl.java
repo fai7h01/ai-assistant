@@ -4,6 +4,7 @@ import com.assistant.dto.records.*;
 import com.assistant.client.InvoiceHubClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceHubResponse;
+import com.assistant.exception.InvoiceCouldNotRetrievedException;
 import com.assistant.service.InvoiceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
+    @Override
     public List<Invoice> getInvoices() {
 
         ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices();
@@ -42,6 +44,7 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
+    @Override
     public InvoiceDetails getInvoiceDetails(String invoiceNo) {
         var invoice = findInvoice(invoiceNo);
         return toInvoiceDetails(invoice);
@@ -73,10 +76,19 @@ public class InvoicingServiceImpl implements InvoiceService {
         throw new IllegalStateException("Response failed.");
     }
 
+
     @Override
-    public InvoiceDetails createInvoice(String companyTitle) {
-        return null;
+    public List<InvoiceDetails> getApprovedInvoices() {
+        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getApprovedInvoices();
+        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
+            List<Invoice> invoices = response.getBody().getData();
+            return invoices.stream()
+                    .map(invoice -> this.toInvoiceDetails(invoice))
+                    .toList();
+        }
+        throw new InvoiceCouldNotRetrievedException("Invoices can not be retrieved.");
     }
+
 
     private InvoiceDetails toInvoiceDetails(Invoice invoice) {
         return new InvoiceDetails(
