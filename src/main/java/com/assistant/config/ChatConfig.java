@@ -34,8 +34,8 @@ public class ChatConfig {
                         You can get approved invoices, which is considered as a SALES.
                         If user asks to analyze sales, you MUST use provided function to get all the approved invoices.
                         If user asks to analyze sales, you SHOULD NOT ASK invoice number, because are getting all the approved invoices at one shot.
-                        Based on approved invoices you should analyze following data:
-                        Which client is more profitable for company, you must determine, frequency of clients in invoices and based on that give proper analyze to users.
+                        Based on approved invoices you MUST just use key details:
+                        Price, Tax and Total. other information is not needed.
                         Use provided function to analyze data from invoices.
                         You can also take user input as a different format like pdf, word file.
                         Today is {current_date}.

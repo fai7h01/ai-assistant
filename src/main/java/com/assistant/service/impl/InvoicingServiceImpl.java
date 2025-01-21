@@ -83,7 +83,7 @@ public class InvoicingServiceImpl implements InvoiceService {
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             List<Invoice> invoices = response.getBody().getData();
             return invoices.stream()
-                    .map(invoice -> this.toInvoiceDetails(invoice))
+                    .map(this::toInvoiceDetails)
                     .toList();
         }
         throw new InvoiceCouldNotRetrievedException("Invoices can not be retrieved.");
