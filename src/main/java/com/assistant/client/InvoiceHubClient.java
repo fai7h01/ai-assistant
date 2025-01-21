@@ -15,16 +15,14 @@ import java.util.List;
 @FeignClient(url = "http://localhost:9090/api/v1", name = "InvoiceHub")
 public interface InvoiceHubClient {
 
-    @GetMapping("/assistant/invoice/list/{companyTitle}")
-    ResponseEntity<InvoiceHubResponse<List<Invoice>>> getInvoices(@PathVariable("companyTitle") String company);
+    @GetMapping("/assistant/invoice/list")
+    ResponseEntity<InvoiceHubResponse<List<Invoice>>> getInvoices();
 
-    @PostMapping("/assistant/invoice/approve/{invNo}/{companyTitle}")
-    ResponseEntity<InvoiceHubResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo,
-                                                               @PathVariable("companyTitle") String company);
+    @PostMapping("/assistant/invoice/approve/{invNo}")
+    ResponseEntity<InvoiceHubResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo);
 
-    @GetMapping("/assistant/invoice/send/{invNo}/{companyTitle}")
-    ResponseEntity<InvoiceHubResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo,
-                                                                   @PathVariable("companyTitle") String company);
+    @GetMapping("/assistant/invoice/send/{invNo}")
+    ResponseEntity<InvoiceHubResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo);
 
     @GetMapping("/company")
     ResponseEntity<CompanyResponse> getLoggedInCompany();

@@ -24,10 +24,10 @@ public class InvoicingTools {
     private final InvoiceService invoiceService;
 
 
-    private Function<InvoiceDetailsRequest, InvoiceDetails> createFunction(BiFunction<String, String, InvoiceDetails> processor) {
+    private Function<InvoiceDetailsRequest, InvoiceDetails> createFunction(Function<String, InvoiceDetails> processor) {
         return request -> {
             try {
-                return processor.apply(request.invoiceNo(), request.companyTitle());
+                return processor.apply(request.invoiceNo());
             } catch (Exception e) {
                 logger.warn("Invoice details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
                 return new InvoiceDetails(request.invoiceNo(), null, null, null, null,

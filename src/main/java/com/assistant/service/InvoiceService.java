@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface InvoiceService {
 
-    List<Invoice> getInvoices(String companyTitle);
+    List<Invoice> getInvoices();
 
-    InvoiceDetails getInvoiceDetails(String invNo, String companyTitle);
+    InvoiceDetails getInvoiceDetails(String invNo);
 
-    InvoiceDetails approveInvoice(String invNo, String companyTitle);
+    InvoiceDetails approveInvoice(String invNo);
 
-    InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle);
+    InvoiceDetails sendInvoiceToEmail(String invNo);
 
     InvoiceDetails createInvoice(String companyTitle);
 

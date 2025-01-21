@@ -24,9 +24,9 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
-    public List<Invoice> getInvoices(String companyTitle) {
+    public List<Invoice> getInvoices() {
 
-        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices(companyTitle);
+        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices();
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
@@ -35,22 +35,22 @@ public class InvoicingServiceImpl implements InvoiceService {
         throw new IllegalStateException("Response failed.");
     }
 
-    private Invoice findInvoice(String invoiceNo, String companyTitle) {
-        return getInvoices(companyTitle).stream()
+    private Invoice findInvoice(String invoiceNo) {
+        return getInvoices().stream()
                 .filter(invoice -> invoice.getInvoiceNo().equals(invoiceNo))
                 .findFirst().orElseThrow(() -> new NoSuchElementException("Invoice Not Found."));
     }
 
 
-    public InvoiceDetails getInvoiceDetails(String invoiceNo, String companyTitle) {
-        var invoice = findInvoice(invoiceNo, companyTitle);
+    public InvoiceDetails getInvoiceDetails(String invoiceNo) {
+        var invoice = findInvoice(invoiceNo);
         return toInvoiceDetails(invoice);
     }
 
     @Override
-    public InvoiceDetails approveInvoice(String invNo, String companyTitle) {
+    public InvoiceDetails approveInvoice(String invNo) {
 
-        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.approveInvoice(invNo, companyTitle);
+        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.approveInvoice(invNo);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();
@@ -61,9 +61,9 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoiceDetails sendInvoiceToEmail(String invNo, String companyTitle) {
+    public InvoiceDetails sendInvoiceToEmail(String invNo) {
 
-        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.sendInvoiceToEmail(invNo, companyTitle);
+        ResponseEntity<InvoiceHubResponse<Invoice>> response = invoiceHubClient.sendInvoiceToEmail(invNo);
 
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             Invoice invoice = response.getBody().getData();

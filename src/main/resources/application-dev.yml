@@ -42,6 +42,7 @@ keycloak:
   use-resource-role-mappings: true
   autodetect-bearer-only: true
 
+
 master:
   user:
     username: admin
