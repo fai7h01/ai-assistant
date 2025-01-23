@@ -140,7 +140,7 @@ public class AiAssistantApplicationTest {
 
         var response = ChatClient.builder(chatModel)
                 .build().prompt()
-                .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
+                .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder().build()))
                 .user(userText)
                 .call()
                 .chatResponse();

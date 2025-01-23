@@ -4,14 +4,10 @@ import com.assistant.dto.records.*;
 import com.assistant.client.InvoiceHubClient;
 import com.assistant.dto.Invoice;
 import com.assistant.dto.response.InvoiceHubResponse;
-import com.assistant.exception.InvoiceCouldNotRetrievedException;
 import com.assistant.service.InvoiceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Slf4j
@@ -25,30 +21,30 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
-    @Override
-    public List<Invoice> getInvoices() {
-
-        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices();
-
-        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
-            log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
-            return response.getBody().getData();
-        }
-        throw new IllegalStateException("Response failed.");
-    }
-
-    private Invoice findInvoice(String invoiceNo) {
-        return getInvoices().stream()
-                .filter(invoice -> invoice.getInvoiceNo().equals(invoiceNo))
-                .findFirst().orElseThrow(() -> new NoSuchElementException("Invoice Not Found."));
-    }
-
-
-    @Override
-    public InvoiceDetails getInvoiceDetails(String invoiceNo) {
-        var invoice = findInvoice(invoiceNo);
-        return toInvoiceDetails(invoice);
-    }
+//    @Override
+//    public List<Invoice> getInvoices() {
+//
+//        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getInvoices();
+//
+//        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
+//            log.info("\n\n>>>>> Invoices retrieved from BE: {}", response.getBody().getData());
+//            return response.getBody().getData();
+//        }
+//        throw new IllegalStateException("Response failed.");
+//    }
+//
+//    private Invoice findInvoice(String invoiceNo) {
+//        return getInvoices().stream()
+//                .filter(invoice -> invoice.getInvoiceNo().equals(invoiceNo))
+//                .findFirst().orElseThrow(() -> new NoSuchElementException("Invoice Not Found."));
+//    }
+//
+//
+//    @Override
+//    public InvoiceDetails getInvoiceDetails(String invoiceNo) {
+//        var invoice = findInvoice(invoiceNo);
+//        return toInvoiceDetails(invoice);
+//    }
 
     @Override
     public InvoiceDetails approveInvoice(String invNo) {
@@ -77,26 +73,13 @@ public class InvoicingServiceImpl implements InvoiceService {
     }
 
 
-    @Override
-    public List<InvoiceDetails> getApprovedInvoices() {
-        ResponseEntity<InvoiceHubResponse<List<Invoice>>> response = invoiceHubClient.getApprovedInvoices();
-        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
-            List<Invoice> invoices = response.getBody().getData();
-            return invoices.stream()
-                    .map(this::toInvoiceDetails)
-                    .toList();
-        }
-        throw new InvoiceCouldNotRetrievedException("Invoices can not be retrieved.");
-    }
-
-
     private InvoiceDetails toInvoiceDetails(Invoice invoice) {
         return new InvoiceDetails(
                 invoice.getInvoiceNo(),
                 invoice.getInvoiceStatus(),
-                invoice.getDateOfIssue(),
-                invoice.getDueDate(),
-                invoice.getAcceptDate(),
+                invoice.getDateOfIssue().toString(),
+                invoice.getDueDate().toString(),
+                invoice.getAcceptDate().toString(),
                 invoice.getPaymentTerms(),
                 invoice.getNotes(),
                 invoice.getCompany(),

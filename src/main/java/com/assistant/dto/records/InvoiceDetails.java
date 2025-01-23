@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record InvoiceDetails(String invoiceNo,
                              InvoiceStatus invoiceStatus,
-                             LocalDateTime dateOfIssue,
-                             LocalDateTime dueDate,
-                             LocalDateTime acceptDate,
+                             String dateOfIssue,
+                             String dueDate,
+                             String acceptDate,
                              String paymentTerms,
                              String notes,
                              String companyTitle,

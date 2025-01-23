@@ -1,9 +1,12 @@
 package com.assistant.util;
 
+import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.records.*;
 import com.assistant.dto.records.InvoiceDetailsRequest;
 import com.assistant.service.InvoiceService;
+import com.assistant.service.ReportingService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.function.TriFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -24,9 +25,35 @@ public class InvoicingTools {
     private static final Logger logger = LoggerFactory.getLogger(InvoicingTools.class);
 
     private final InvoiceService invoiceService;
+    private final ReportingService reportingService;
 
 
-    private Function<InvoiceDetailsRequest, InvoiceDetails> createFunction(Function<String, InvoiceDetails> processor) {
+    @Bean
+    @Description("Approve invoice and get details")
+    public Function<InvoiceDetailsRequest, InvoiceDetails> approveInvoice() {
+        return createInvoiceFunction(invoiceService::approveInvoice);
+    }
+
+    @Bean
+    @Description("Send invoice via mail to client")
+    public Function<InvoiceDetailsRequest, InvoiceDetails> sendInvoiceViaMail() {
+        return createInvoiceFunction(invoiceService::sendInvoiceToEmail);
+    }
+
+    @Bean
+    @Description("Analyze last month sales data")
+    public Function<SalesAnalysisRequest, SalesAnalysis> analyzeSalesLastMonth() {
+        return createSalesAnalysisSupplier(reportingService::getLastMonthSalesAnalysis);
+    }
+
+    @Bean
+    @Description("Analyze sales data in specific date range")
+    public Function<SalesAnalysisRequest, SalesAnalysis> analyzeSalesDateRange() {
+        return createSalesAnalysisFunction(reportingService::getSalesAnalysis);
+    }
+
+
+    private Function<InvoiceDetailsRequest, InvoiceDetails> createInvoiceFunction(Function<String, InvoiceDetails> processor) {
         return request -> {
             try {
                 return processor.apply(request.invoiceNo());
@@ -38,45 +65,26 @@ public class InvoicingTools {
         };
     }
 
-    private Function<InvoiceDetailsRequest, List<InvoiceDetails>> createSupplier(Supplier<List<InvoiceDetails>> processor) {
+    private Function<SalesAnalysisRequest, SalesAnalysis> createSalesAnalysisSupplier(Supplier<SalesAnalysis> processor) {
         return request -> {
             try {
                 return processor.get();
             } catch (Exception e) {
-                logger.warn("Invoice details list: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
-                return new ArrayList<>();
+                logger.warn("Sales Analysis: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new SalesAnalysis();
             }
         };
     }
 
-
-
-    @Bean
-    @Description("Get invoice details")
-    public Function<InvoiceDetailsRequest, InvoiceDetails> getInvoiceDetails() {
-        return createFunction(invoiceService::getInvoiceDetails);
+    private Function<SalesAnalysisRequest, SalesAnalysis> createSalesAnalysisFunction(TriFunction<String, String, String,SalesAnalysis> processor) {
+        return request -> {
+            try {
+                return processor.apply(request.year(), request.startMonth(), request.endMonth());
+            } catch (Exception e) {
+                logger.warn("Sales Analysis with params: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new SalesAnalysis();
+            }
+        };
     }
-
-    @Bean
-    @Description("Approve invoice and get details")
-    public Function<InvoiceDetailsRequest, InvoiceDetails> approveInvoice() {
-        return createFunction(invoiceService::approveInvoice);
-    }
-
-    @Bean
-    @Description("Send invoice via mail to client")
-    public Function<InvoiceDetailsRequest, InvoiceDetails> sendInvoiceViaMail() {
-        return createFunction(invoiceService::sendInvoiceToEmail);
-    }
-
-    @Bean
-    @Description("Analyze sales data")
-    public Function<InvoiceDetailsRequest, List<InvoiceDetails>> analyzeSales() {
-        return createSupplier(invoiceService::getApprovedInvoices);
-    }
-
-    //data analysis
-
-    //invoice crud
 
 }

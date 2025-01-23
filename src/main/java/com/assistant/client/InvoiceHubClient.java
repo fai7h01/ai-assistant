@@ -1,6 +1,7 @@
 package com.assistant.client;
 
 import com.assistant.dto.Invoice;
+import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.response.InvoiceHubResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -8,13 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
 
 @FeignClient(url = "http://localhost:9090/api/v1", name = "InvoiceHub")
 public interface InvoiceHubClient {
 
-    @GetMapping("/assistant/invoice/list")
-    ResponseEntity<InvoiceHubResponse<List<Invoice>>> getInvoices();
+    @GetMapping("/assistant/sales-analysis/last-month")
+    ResponseEntity<InvoiceHubResponse<SalesAnalysis>> getLastMonthSalesAnalysis();
+
+    @GetMapping("/assistant/sales-analysis/{year}/{startMonth}/{endMonth}")
+    ResponseEntity<InvoiceHubResponse<SalesAnalysis>> getSalesAnalysis(@PathVariable("year") String year,
+                                                                       @PathVariable("startMonth") String startMonth,
+                                                                       @PathVariable("endMonth") String endMonth);
 
     @PostMapping("/assistant/invoice/approve/{invNo}")
     ResponseEntity<InvoiceHubResponse<Invoice>> approveInvoice(@PathVariable("invNo") String invNo);
@@ -22,7 +27,5 @@ public interface InvoiceHubClient {
     @GetMapping("/assistant/invoice/send/{invNo}")
     ResponseEntity<InvoiceHubResponse<Invoice>> sendInvoiceToEmail(@PathVariable("invNo") String invNo);
 
-    @GetMapping("/assistant/invoice/list/status-approved")
-    ResponseEntity<InvoiceHubResponse<List<Invoice>>> getApprovedInvoices();
 
 }

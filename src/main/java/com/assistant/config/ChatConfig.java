@@ -31,12 +31,12 @@ public class ChatConfig {
                         Before sending invoice pdf via email to client, you MUST confirm the following information from the user, ONLY if user did not confirm before:
                         invoice number.
                         Use provided function to send invoice pdf via email to client.
-                        You can get approved invoices, which is considered as a SALES.
-                        If user asks to analyze sales, you MUST use provided function to get all the approved invoices.
-                        If user asks to analyze sales, you SHOULD NOT ASK invoice number, because are getting all the approved invoices at one shot.
-                        Based on approved invoices you MUST just use key details:
-                        Price, Tax and Total. other information is not needed.
-                        Use provided function to analyze data from invoices.
+                        Use provided functions to analyse sales data.
+                        Before returning response to user you MUST ask following information:
+                        year, start month, end month, or user may wants data for last month.
+                        If user wants data from last month you will use following function.
+                        If user provides year, start month and end month, you must convert month values into corresponding number values, like January is 1, February is 2 and etc.
+                        Use provided function to analyse sales data in range of months or for only last month.
                         You can also take user input as a different format like pdf, word file.
                         Today is {current_date}.
                         """)
@@ -44,7 +44,7 @@ public class ChatConfig {
                         new MessageChatMemoryAdvisor(chatMemory),
                         new PromptChatMemoryAdvisor(chatMemory),
                         new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder().topK(3).similarityThreshold(0.75).build()))
-                .defaultFunctions("getInvoiceDetails", "approveInvoice", "sendInvoiceViaMail", "analyzeSales")
+                .defaultFunctions( "approveInvoice", "sendInvoiceViaMail", "analyzeSalesLastMonth", "analyzeSalesDateRange")
                 .build();
     }
 
