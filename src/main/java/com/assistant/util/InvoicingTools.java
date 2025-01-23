@@ -1,5 +1,6 @@
 package com.assistant.util;
 
+import com.assistant.dto.analysis.InvoiceAnalysis;
 import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.records.*;
 import com.assistant.dto.records.InvoiceDetailsRequest;
@@ -15,7 +16,6 @@ import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 
 @Configuration
@@ -41,15 +41,15 @@ public class InvoicingTools {
     }
 
     @Bean
-    @Description("Analyze last month sales data")
-    public Function<SalesAnalysisRequest, SalesAnalysis> analyzeSalesLastMonth() {
-        return createSalesAnalysisSupplier(reportingService::getLastMonthSalesAnalysis);
-    }
-
-    @Bean
     @Description("Analyze sales data in specific date range")
     public Function<SalesAnalysisRequest, SalesAnalysis> analyzeSalesDateRange() {
         return createSalesAnalysisFunction(reportingService::getSalesAnalysis);
+    }
+
+    @Bean
+    @Description("Analyze invoices data in specific date range")
+    public Function<InvoiceAnalysisRequest, InvoiceAnalysis> analyzeInvoicesDateRange() {
+        return createInvoiceAnalysisFunction(reportingService::getInvoiceAnalysis);
     }
 
 
@@ -65,10 +65,10 @@ public class InvoicingTools {
         };
     }
 
-    private Function<SalesAnalysisRequest, SalesAnalysis> createSalesAnalysisSupplier(Supplier<SalesAnalysis> processor) {
+    private Function<SalesAnalysisRequest, SalesAnalysis> createSalesAnalysisFunction(TriFunction<String, String, String, SalesAnalysis> processor) {
         return request -> {
             try {
-                return processor.get();
+                return processor.apply(request.year(), request.startMonth(), request.endMonth());
             } catch (Exception e) {
                 logger.warn("Sales Analysis: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
                 return new SalesAnalysis();
@@ -76,13 +76,13 @@ public class InvoicingTools {
         };
     }
 
-    private Function<SalesAnalysisRequest, SalesAnalysis> createSalesAnalysisFunction(TriFunction<String, String, String,SalesAnalysis> processor) {
+    private Function<InvoiceAnalysisRequest, InvoiceAnalysis> createInvoiceAnalysisFunction(TriFunction<String, String, String, InvoiceAnalysis> processor) {
         return request -> {
             try {
                 return processor.apply(request.year(), request.startMonth(), request.endMonth());
             } catch (Exception e) {
-                logger.warn("Sales Analysis with params: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
-                return new SalesAnalysis();
+                logger.warn("Invoice Analysis: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new InvoiceAnalysis();
             }
         };
     }

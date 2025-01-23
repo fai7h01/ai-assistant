@@ -1,6 +1,7 @@
 package com.assistant.service.impl;
 
 import com.assistant.client.InvoiceHubClient;
+import com.assistant.dto.analysis.InvoiceAnalysis;
 import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.response.InvoiceHubResponse;
 import com.assistant.exception.InvoiceHubResponseCouldNotRetrievedException;
@@ -20,8 +21,8 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     @Override
-    public SalesAnalysis getLastMonthSalesAnalysis() {
-        ResponseEntity<InvoiceHubResponse<SalesAnalysis>> response = invoiceHubClient.getLastMonthSalesAnalysis();
+    public SalesAnalysis getSalesAnalysis(String year, String startMonth, String endMonth) {
+        ResponseEntity<InvoiceHubResponse<SalesAnalysis>> response = invoiceHubClient.getSalesAnalysis(year, startMonth, endMonth);
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             return response.getBody().getData();
         }
@@ -29,11 +30,11 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     @Override
-    public SalesAnalysis getSalesAnalysis(String year, String startMonth, String endMonth) {
-        ResponseEntity<InvoiceHubResponse<SalesAnalysis>> response = invoiceHubClient.getSalesAnalysis(year, startMonth, endMonth);
+    public InvoiceAnalysis getInvoiceAnalysis(String year, String startMonth, String endMonth) {
+        ResponseEntity<InvoiceHubResponse<InvoiceAnalysis>> response = invoiceHubClient.getInvoiceAnalysis(year, startMonth, endMonth);
         if (Objects.requireNonNull(response.getBody()).isSuccess()) {
             return response.getBody().getData();
         }
-        throw new InvoiceHubResponseCouldNotRetrievedException("Sales analysis data with params could not retrieved.");
+        throw new InvoiceHubResponseCouldNotRetrievedException("Invoice analysis data could not retrieved.");
     }
 }
