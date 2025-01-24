@@ -1,5 +1,6 @@
 package com.assistant.util;
 
+import com.assistant.dto.analysis.ClientAnalysis;
 import com.assistant.dto.analysis.InvoiceAnalysis;
 import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.records.*;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 @Configuration
@@ -52,6 +54,22 @@ public class InvoicingTools {
         return createInvoiceAnalysisFunction(reportingService::getInvoiceAnalysis);
     }
 
+    @Bean
+    @Description("Analyze clients data")
+    public Function<Void, ClientAnalysis> analyzeClientsData() {
+        return createClientSupplier(reportingService::getClientAnalysis);
+    }
+
+    private Function<Void, ClientAnalysis> createClientSupplier(Supplier<ClientAnalysis> processor) {
+        return request -> {
+            try {
+                return processor.get();
+            } catch (Exception e) {
+                logger.warn("Client details: {}", NestedExceptionUtils.getMostSpecificCause(e).getMessage());
+                return new ClientAnalysis();
+            }
+        };
+    }
 
     private Function<InvoiceDetailsRequest, InvoiceDetails> createInvoiceFunction(Function<String, InvoiceDetails> processor) {
         return request -> {

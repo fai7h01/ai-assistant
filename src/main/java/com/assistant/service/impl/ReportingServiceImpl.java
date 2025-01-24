@@ -1,6 +1,7 @@
 package com.assistant.service.impl;
 
 import com.assistant.client.InvoiceHubClient;
+import com.assistant.dto.analysis.ClientAnalysis;
 import com.assistant.dto.analysis.InvoiceAnalysis;
 import com.assistant.dto.analysis.SalesAnalysis;
 import com.assistant.dto.response.InvoiceHubResponse;
@@ -36,5 +37,14 @@ public class ReportingServiceImpl implements ReportingService {
             return response.getBody().getData();
         }
         throw new InvoiceHubResponseCouldNotRetrievedException("Invoice analysis data could not retrieved.");
+    }
+
+    @Override
+    public ClientAnalysis getClientAnalysis() {
+        ResponseEntity<InvoiceHubResponse<ClientAnalysis>> response = invoiceHubClient.getClientAnalysis();
+        if (Objects.requireNonNull(response.getBody()).isSuccess()) {
+            return response.getBody().getData();
+        }
+        throw new InvoiceHubResponseCouldNotRetrievedException("Client analysis data could not retrieved.");
     }
 }
