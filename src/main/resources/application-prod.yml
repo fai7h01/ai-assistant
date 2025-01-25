@@ -15,7 +15,11 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    #dpg-cuafsshopnds73eci1k0-a.frankfurt-postgres.render.com/assistant_db_sens
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URL}
 logging:
   level:
     org:
