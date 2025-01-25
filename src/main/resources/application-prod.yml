@@ -15,7 +15,7 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
+    #dpg-cuafsshopnds73eci1k0-a.frankfurt-postgres.render.com/assistant_db_sens
 logging:
   level:
     org:

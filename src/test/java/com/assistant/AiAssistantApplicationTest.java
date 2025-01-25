@@ -145,7 +145,7 @@ public class AiAssistantApplicationTest {
                 .call()
                 .chatResponse();
 
-        logger.info("\n\n>> Response: {} \n\n", response.getResult().getOutput().getContent());
+       // logger.info("\n\n>> Response: {} \n\n", response.getResult().getOutput().getContent());
 
     }
 
