@@ -42,7 +42,6 @@ keycloak:
   use-resource-role-mappings: true
   autodetect-bearer-only: true
 
-
 master:
   user:
     username: admin
@@ -52,6 +51,10 @@ master:
 
 keycloak-token:
   url: http://localhost:8080/auth/realms/e-invoices/protocol/openid-connect/token
+
+app:
+  front:
+    base-url: http://localhost:5173
 
 server:
   port: 1010

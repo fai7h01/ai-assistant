@@ -31,7 +31,6 @@ logging:
       springframework:
         security: DEBUG
 
-
 keycloak:
   realm: ${KC_REALM}
   auth-server-url: ${KC_AUTH_URL}
@@ -45,7 +44,6 @@ keycloak:
 keycloak-token:
   url: ${KC_TOKEN_URL}
 
-
 master:
   user:
     username: ${KC_ADMIN_USER}
@@ -53,6 +51,9 @@ master:
   realm: master
   client: admin-cli
 
+app:
+  front:
+    base-url: https://www.invoicehub.space
 
 server:
   port: 1010
