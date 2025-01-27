@@ -40,7 +40,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwt -> {
 
-                    log.info("JWT TOKEN: {}", jwt.getTokenValue());
                     Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
                     Map<String, Map<String, Collection<String>>> resourceAccess = jwt.getClaim("resource_access");

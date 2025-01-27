@@ -16,8 +16,6 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-import static com.sun.imageio.plugins.jpeg.JPEG.version;
-
 @Service
 public class DataLoadingServiceImpl implements DataLoadingService {
 
