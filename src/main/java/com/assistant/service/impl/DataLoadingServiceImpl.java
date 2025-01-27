@@ -16,6 +16,8 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static com.sun.imageio.plugins.jpeg.JPEG.version;
+
 @Service
 public class DataLoadingServiceImpl implements DataLoadingService {
 
@@ -41,7 +43,7 @@ public class DataLoadingServiceImpl implements DataLoadingService {
                                 .build())
                         .withPagesPerDocument(1)
                         .build());
-        // Transform
+
         var tokenTextSplitter = new TokenTextSplitter();
 
         logger.info(
@@ -49,13 +51,20 @@ public class DataLoadingServiceImpl implements DataLoadingService {
 
         List<Document> splitDocuments = tokenTextSplitter.split(pdfReader.read());
 
-        // tag as external knowledge in the vector store's metadata
+        String searchQuery = "filename:" + resource.getFilename() + " version:" + 1;
+
+        List<Document> result = vectorStore.similaritySearch(searchQuery);
+
+        if (!result.isEmpty()) {
+            logger.info("Data for '{}' version {} is already loaded. Exiting load process.", resource.getFilename(), 1);
+            return;
+        }
+
         for (Document splitDocument : splitDocuments) {
             splitDocument.getMetadata().put("filename", resource.getFilename());
             splitDocument.getMetadata().put("version", 1);
         }
 
-        // Load
         this.vectorStore.write(splitDocuments);
 
         logger.info("Done parsing document, splitting, creating embeddings and storing in vector store");
