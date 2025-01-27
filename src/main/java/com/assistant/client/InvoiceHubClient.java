@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-@FeignClient(url = "http://localhost:9090/api/v1", name = "InvoiceHub")
+@FeignClient(url = "https://api.invoicehub.space/api/v1", name = "InvoiceHub")
 public interface InvoiceHubClient {
 
     @GetMapping("/assistant/client-analysis")
