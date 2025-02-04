@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 @Slf4j
 @EnableFeignClients
 @SpringBootApplication
-@Profile("prod")
+@Profile("dev")
 public class AiAssistantApplication {
 
     public AiAssistantApplication(DataLoadingService dataLoadingService) {

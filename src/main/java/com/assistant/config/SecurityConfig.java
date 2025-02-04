@@ -74,9 +74,9 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withJwkSetUri("https://auth.invoicehub.space/auth/realms/e-invoices/protocol/openid-connect/certs")
-                .build();
-    }
+//    @Bean
+//    public JwtDecoder jwtDecoder() {
+//        return NimbusJwtDecoder.withJwkSetUri("https://auth.invoicehub.space/auth/realms/e-invoices/protocol/openid-connect/certs")
+//                .build();
+//    }
 }
